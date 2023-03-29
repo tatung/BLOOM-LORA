@@ -28,9 +28,10 @@ if device == "cuda":
         BASE_MODEL,
         load_in_8bit=True,
         torch_dtype=torch.float16,
-        device_map="auto",
+        # device_map="auto",
+        device_map={'':0},
     )
-    model = PeftModel.from_pretrained(model, LORA_WEIGHTS, torch_dtype=torch.float16)
+    model = PeftModel.from_pretrained(model, LORA_WEIGHTS, torch_dtype=torch.float16, device_map={'':0},)
 elif device == "mps":
     model = BloomForCausalLM.from_pretrained(
         BASE_MODEL,
@@ -135,7 +136,7 @@ gr.Interface(
     ],
     title="🌲 🌲 🌲 BLOOM-LoRA",
     description="BLOOM-LoRA is a 560M-parameter BLOOM model finetuned to follow instructions. It is trained on the [Stanford Alpaca](https://github.com/tatsu-lab/stanford_alpaca) dataset and makes use of the Huggingface LLaMA implementation. For more information, please visit [the project's website](https://github.com/tloen/alpaca-lora).",
-).launch()
+).launch(share=True)
 
 # Old testing code follows.
 

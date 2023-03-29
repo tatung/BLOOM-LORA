@@ -26,11 +26,13 @@ if device == "cuda":
         "decapoda-research/llama-7b-hf",
         load_in_8bit=True,
         torch_dtype=torch.float16,
-        device_map="auto",
+        # device_map="auto",
+        device_map={'':0},
     )
     model = PeftModel.from_pretrained(
         model, "tloen/alpaca-lora-7b",
-        torch_dtype=torch.float16
+        torch_dtype=torch.float16,
+        device_map={'':0},
     )
 elif device == "mps":
     model = LlamaForCausalLM.from_pretrained(
@@ -137,7 +139,7 @@ gr.Interface(
 
 # Old testing code follows.
 
-"""
+
 if __name__ == "__main__":
     # testing code for readme
     for instruction in [
@@ -154,4 +156,4 @@ if __name__ == "__main__":
         print("Instruction:", instruction)
         print("Response:", evaluate(instruction))
         print()
-"""
+
